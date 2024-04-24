@@ -1,12 +1,12 @@
 from flask import Flask
-from src.core.extensions import  db,auth
+from src.core.extensions import  db
+from src.views.index import index_bp
 from src.core.errors import register_errors
 from src.core.request import register_request_handlers
-from src.settings import config
-
-
+from src.settings import config,basedir
 import os
-basedir=os.path.abspath(os.path.dirname(__file__))
+
+
 def inin_flie():
     LOG_DIR=os.path.join(basedir, 'logs')
     if not os.path.exists(LOG_DIR):
@@ -27,7 +27,10 @@ def inin_flie():
 
 
 def create_app(config_name):
-    app=Flask('backend')
+    app=Flask('src')
+    #buleprints
+    app.register_blueprint(index_bp,url_prefix='/index')
+
     inin_flie()
     app.config.from_object(config[config_name])
     #extensions

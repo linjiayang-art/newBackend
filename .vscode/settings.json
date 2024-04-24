@@ -1,0 +1,8 @@
+{
+    "files.exclude": {
+        "**/cachefile": true,       // 隐藏所有名为 .cache 的文件夹
+        "**/modelfile": true, // 隐藏所有 node_modules 文件夹
+        "**/build": true    ,     // 隐藏所有 build 文件夹
+        "**/templates":false
+    }
+}
