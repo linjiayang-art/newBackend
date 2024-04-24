@@ -3,6 +3,7 @@ from src.core.extensions import  db
 from src.views.index import index_bp
 from src.core.errors import register_errors
 from src.core.request import register_request_handlers
+from src.core.logging import register_logging
 from src.settings import config,basedir
 import os
 
@@ -37,6 +38,7 @@ def create_app(config_name):
     db.init_app(app)
     register_errors(app)
     register_request_handlers(app)
+    register_logging(app)
     # auth.init_app(app)
 
     return app
