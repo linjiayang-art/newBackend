@@ -4,6 +4,7 @@ from src.views.index import index_bp
 from src.core.errors import register_errors
 from src.core.request import register_request_handlers
 from src.core.logging import register_logging
+from src.core.commands import register_commands
 from src.settings import config,basedir
 import os
 
@@ -39,6 +40,7 @@ def create_app(config_name):
     register_errors(app)
     register_request_handlers(app)
     register_logging(app)
+    register_commands(app)
     # auth.init_app(app)
 
     return app

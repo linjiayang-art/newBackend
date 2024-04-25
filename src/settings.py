@@ -20,6 +20,13 @@ class BaseConfig:
     #SQL ALCHEMY
     SQLALCHEMY_RECORD_QUERIES=True
     BACKEND_SLOW_QUERY_THRESHOLD=0.001
+    #database
+    
+    SQLALCHEMY_DATABASE_URI="mssql+pymssql://sa:123456@172.16.3.29/backend?charset=utf8"
+ 
+    # SQLALCHEMY_BINDS={ 'sicore':'mysql://it:it_123456@172.16.3.226/sicore',
+    #                    }
+
     #MAIL
     MAIL_SERVER=os.getenv('MAIL_SERVER')
     MAIL_PORT=587
@@ -49,13 +56,14 @@ class BaseConfig:
 
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
+    pass
+    # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
 
 
 class TestingConfig(BaseConfig):
     TESTING = True
     WTF_CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # in-memory database
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # in-memory database
 
 
 class ProductionConfig(BaseConfig):
