@@ -15,7 +15,7 @@ def fake_admin():
 
 def fake_menu():
     menu1 = Menu(id=1,  parent_id=0, menu_name='系统管理', menu_type='MENU',
-                 menu_path='/system', component='Layout',
+                 menu_path='system', component='Layout',
                  menu_visible=0,
                  menu_sort=1,
                  menu_icon='system',
@@ -36,7 +36,7 @@ def fake_menu():
         parent_id=1,
         menu_name='/用户管理',
         menu_type='CATALOG',
-        menu_path='/system',
+        menu_path='system',
         component='system/menu/user',
         menu_visible=True,
         menu_sort=3,

@@ -39,6 +39,7 @@ class Menu(db.Model,BasicMode):
     menu_icon = Column(String(80))
     menu_type = Column(String(80))
     menu_visible = Column(Boolean, default=True)
+    keep_alive = Column(Boolean, default=True)
     menu_perm = Column(String(80))
     menu_sort = Column(BigInteger)
 
@@ -68,7 +69,7 @@ class Menu(db.Model,BasicMode):
                 "icon": self.menu_icon,
                 "hidden":self.menu_visible,
                 "roles": [],
-                "keepAlive": True
+                "keepAlive": self.keep_alive
             }
         }
 
