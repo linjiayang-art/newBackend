@@ -49,8 +49,10 @@ def create_app(config_name):
     with app.app_context():
         from src.apis.v1.system.userinfo import UserResource
         # Register the API documentation after routes are registered
+   
         #docs.register(UserResource, blueprint='api_v1', endpoint='user_detail')
-        # docs.register(UserResource, endpoint='user_create')
+        
+        #docs.register(UserResource,blueprint='api_v1', endpoint='user_create')
     # auth.init_app(app)
 
     return app

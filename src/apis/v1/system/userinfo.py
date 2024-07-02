@@ -5,7 +5,7 @@ from ....schemas.system_schemas import UserInfoSchema
 from ....validators import user_args
 from flask_apispec import use_kwargs, marshal_with
 from ....core.extensions import db,docs
-from ...v1 import api_v1
+
 class UserResource(MethodView):
     @marshal_with(UserInfoSchema)
     def get(self, user_id):
@@ -19,6 +19,6 @@ class UserResource(MethodView):
         db.session.add(new_user)
         db.session.commit()
         return new_user, 201
-api_v1.add_url_rule('/users/<int:user_id>', view_func=UserResource.as_view('user_detail'),methods=['GET'])
-api_v1.add_url_rule('/users', view_func=UserResource.as_view('user_create'),methods=['POST'])
+# api_v1.add_url_rule('/users/<int:user_id>', view_func=UserResource.as_view('user_detail'),methods=['GET'])
+# api_v1.add_url_rule('/users', view_func=UserResource.as_view('user_create'),methods=['POST'])
 

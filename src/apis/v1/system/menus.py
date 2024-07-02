@@ -1,6 +1,6 @@
 from flask.views import MethodView
 from flask import jsonify, request, current_app, json
-from ...v1 import api_v1
+
 from ....models.system import UserInfo, Menu
 from sqlalchemy import select
 from ....core.extensions import db
