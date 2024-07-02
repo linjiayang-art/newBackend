@@ -5,12 +5,13 @@ import os
 import uuid
 import time
 import urllib.parse
-file_bp=Blueprint('file',__name__,url_prefix='/file')
+
+
+file_bp=Blueprint('file_server',__name__)
 
 @file_bp.route('/')
 def index():
     return 'fileserver' 
-
 def random_filename(filename):
     ext=os.path.splitext(filename)[1]
     new_filename=uuid.uuid4().hex+ext
