@@ -1,5 +1,5 @@
 from flask import Flask
-from src.core.extensions import  db
+from src.core.extensions import  db,docs
 from src.views.index import index_bp
 from src.core.errors import register_errors
 from src.core.request import register_request_handlers
@@ -7,7 +7,7 @@ from src.core.logging import register_logging
 from src.core.commands import register_commands
 from src.settings import config,basedir
 import os
-from src.apis import api_v1
+from src.apis.v1 import api_v1
 
 def inin_flie():
     LOG_DIR=os.path.join(basedir, 'logs')
@@ -38,6 +38,7 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     #extensions
     db.init_app(app)
+    docs.init_app(app)
     register_errors(app)
     register_request_handlers(app)
     register_logging(app)
