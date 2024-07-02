@@ -7,7 +7,7 @@ from src.core.logging import register_logging
 from src.core.commands import register_commands
 from src.settings import config,basedir
 import os
-
+from src.apis import api_v1
 
 def inin_flie():
     LOG_DIR=os.path.join(basedir, 'logs')
@@ -32,7 +32,8 @@ def create_app(config_name):
     app=Flask('src')
     #buleprints
     app.register_blueprint(index_bp,url_prefix='/index')
-
+    app.register_blueprint(api_v1,url_prefix='/api/v1')
+    
     inin_flie()
     app.config.from_object(config[config_name])
     #extensions
