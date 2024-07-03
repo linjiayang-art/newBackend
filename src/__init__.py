@@ -1,6 +1,6 @@
-from flask import Flask
+from flask import Flask, jsonify
 
-from src.core.extensions import  db,docs
+from .core.extensions import  db, spec
 from .views.index import index_bp
 from src.core.errors import register_errors
 from src.core.request import register_request_handlers
@@ -32,28 +32,32 @@ def init_flie():
 def create_app(config_name):
     app=Flask('src')
     #buleprints
+    app.json.ensure_ascii = False
     app.register_blueprint(index_bp,url_prefix='/index')
     app.register_blueprint(api_v1,url_prefix='/api/v1')
     app.register_blueprint(file_bp,url_prefix='/file')
-    
+
     init_flie()
     app.config.from_object(config[config_name])
     #extensions
     db.init_app(app)
-    docs.init_app(app)
+
 
     register_errors(app)
     register_request_handlers(app)
     register_logging(app)
     register_commands(app)
-    with app.app_context():
-        from src.apis.v1.system.userinfo import UserResource
-        # Register the API documentation after routes are registered
-   
-        #docs.register(UserResource, blueprint='api_v1', endpoint='user_detail')
+    # with app.app_context():
+    #     from src.apis.v1.system.userinfo import UserResource
+    #     spec.path(view=UserResource, app=app)
         
-        #docs.register(UserResource,blueprint='api_v1', endpoint='user_create')
-    # auth.init_app(app)
+    #     # Serve the OpenAPI spec as JSON
+    #     @app.route("/swagger.json")
+    #     def swagger_json():
+    #         return jsonify(spec.to_dict())
+    
+    #     #docs.register(UserResource,blueprint='api_v1', endpoint='user_create')
+    # # auth.init_app(app)
 
     return app
 

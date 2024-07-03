@@ -13,6 +13,7 @@ def register_errors(app):
 
     @app.errorhandler(500)
     def internal_server_error(error):
+        print(error)
         return render_template('errors/500.html', description=error.description), 500
 
     @app.errorhandler(CSRFError)

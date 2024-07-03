@@ -24,6 +24,7 @@ class BaseConfig:
     
     SQLALCHEMY_DATABASE_URI="mssql+pymssql://sa:123456@172.16.3.29/backend?charset=utf8"
  
+    JSON_AS_ASCII=False
     # SQLALCHEMY_BINDS={ 'sicore':'mysql://it:it_123456@172.16.3.226/sicore',
     #                    }
 
