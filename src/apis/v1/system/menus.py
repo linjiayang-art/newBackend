@@ -31,7 +31,7 @@ class MenusAPI(MethodView):
     def get(self, menu_id=None):
         if menu_id:
             menu = Menu.query.get_or_404(menu_id)
-            return jsonify(menu_schema.dump(menu))
+            return jsonify(code=200,data=menu_schema.dump(menu),msg='获取信息成功！')
         else:
             menus = db.session.execute(select(Menu).filter_by(is_deleted=0)).scalars().all()
             menus = generate_menu(menus, 0)

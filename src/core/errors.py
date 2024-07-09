@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import jsonify, render_template
 from flask_wtf.csrf import CSRFError
 
 
@@ -11,9 +11,11 @@ def register_errors(app):
     def page_not_found(error):
         return render_template('errors/404.html', description=error.description), 404
 
+
     @app.errorhandler(500)
     def internal_server_error(error):
         print(error)
+        
         return render_template('errors/500.html', description=error.description), 500
 
     @app.errorhandler(CSRFError)

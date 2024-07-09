@@ -18,6 +18,8 @@ class UserResource(MethodView):
         db.session.commit()
         return jsonify(UserInfoSchema().dump(new_user)), 201
 
+
+
 api_v1.add_url_rule('/userinfo/<int:user_id>', view_func=UserResource.as_view('user_detail'),methods=['GET'])
 api_v1.add_url_rule('/users', view_func=UserResource.as_view('user_create'),methods=['POST'])
 from ....core.extensions  import spec
