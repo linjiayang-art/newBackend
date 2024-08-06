@@ -10,11 +10,12 @@ from ....core.extensions import db
 # from ....core.extensions import db, csrf
 # from backend.apis.auth.auth import generate_token, auth_required
 from flask_wtf.csrf import generate_csrf
+# from ....flask_httpauth import auth
 # from backend.forms.systemform import MenuFrom
 # from apispec import APISpec
 menu_schema = MenuSchema()
 menus_schema = MenuSchema(many=True)
-
+from ....core.auth import generate_token
 
 def generate_menu( menu_items: list, parent_id: int):
     result = []
@@ -57,20 +58,37 @@ class MenusAPI(MethodView):
         return '', 204
 
 
+
 class TokenAPI(MethodView):
     def post(self):
         data = request.get_json()
-        username = data.get('username')
-        password = data.get('password')
-        return jsonify({''})
-        user = UserInfo.query.filter_by(username=username).first()
-        if user is None or not user.verify_password(password):
-            return jsonify({'message': '用户名或密码错误'}), 401
-        token = user.generate_auth_token()
-        return jsonify({'token': token.decode('ascii')})
+        data = dict(data)
+        userno = data.get('userno', None)
+        password = data.get('password', None)
+        if userno is None or password is None:
+            return jsonify(code='401', msg='请完善表单后再提交')
+
+        user = select(UserInfo).filter_by(userno=userno, is_deleted=False)
+        user = db.session.execute(user).scalar()
+        if user is None:
+            return jsonify(code='401', msg='用户不存在,请检查用户编号是否正确')
+        if user.validate_password(password=password) == False:
+            return jsonify(code='401', msg='用户密码错误,请检查用户密码否正确')
+
+        token_data = generate_token(user=user)
+        token, expiration = token_data[0], token_data[1]
+        csrf_token = generate_csrf(current_app.config['SECRET_KEY'])
+        data = {
+            'access_token':token,
+            'status_text': expiration,
+            'csrf_token': csrf_token
+        }
+        return jsonify(code=200, msg='登录成功', data=data)
     
 # Register the resource with the blueprint
 menu_view = MenusAPI.as_view('menu_resource')
 api_v1.add_url_rule('/menus', defaults={'menu_id': None}, view_func=menu_view, methods=['GET'])
 api_v1.add_url_rule('/menus', view_func=menu_view, methods=['POST'])
 api_v1.add_url_rule('/menus/<int:menu_id>', view_func=menu_view, methods=['GET', 'PUT', 'DELETE'])
+token_view = TokenAPI.as_view('token_resource')
+api_v1.add_url_rule('/token', view_func=token_view, methods=['POST'])

@@ -15,7 +15,8 @@ class UserInfo(db.Model,BasicMode):
     email=Column(String(255))
     
     def __str__(self) -> str:
-        return self.email
+        return self.username
+        # return self.email+'-'+self.username
 
     @property
     def password(self):
@@ -96,6 +97,24 @@ class SysUserRole(db.Model,BasicMode):
     user_id = Column(BigInteger)
     role_id = Column(BigInteger)
 
+class SysPerm(db.Model,BasicMode):
+    __tablename__ = 'sys_perm'
+    id = Column(Integer, primary_key=True)
+    perm_name = Column(String(50))
+    perm_code = Column(String(50))
+    perm_type = Column(String(50))
+    perm_url = Column(String(50))
+    perm_method = Column(String(50))
+    perm_status = Column(Boolean, default=True)
+    perm_sort = Column(String(50))
+    perm_icon = Column(String(50))
+    parent_id = Column(BigInteger)
+
+class SysRolePerm(db.Model,BasicMode):
+    __tablename__ = 'sys_role_perm'
+    id = Column(Integer, primary_key=True)
+    role_id = Column(BigInteger)
+    perm_id = Column(BigInteger)
 
 class DictType(db.Model, BasicMode):
     __tablename__ = 'sys_dict_type'

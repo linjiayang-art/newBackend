@@ -41,7 +41,7 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     #extensions
     db.init_app(app)
-
+    # spec.init_app(app)
 
     register_errors(app)
     register_request_handlers(app)

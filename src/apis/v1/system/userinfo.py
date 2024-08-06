@@ -4,7 +4,7 @@ from ....models.system import UserInfo, Menu
 from ....schemas.system_schemas import UserInfoSchema
 from ....validators import user_args
 from ...v1 import api_v1
-from ....core.extensions import db
+from ....core.extensions import db,spec
 
 class UserResource(MethodView):
     def get(self, user_id):
@@ -22,7 +22,6 @@ class UserResource(MethodView):
 
 api_v1.add_url_rule('/userinfo/<int:user_id>', view_func=UserResource.as_view('user_detail'),methods=['GET'])
 api_v1.add_url_rule('/users', view_func=UserResource.as_view('user_create'),methods=['POST'])
-from ....core.extensions  import spec
 
-# spec.components.schema("UserInfoSchema", schema=UserInfoSchema)
+spec.components.schema("UserInfoSchema", schema=UserInfoSchema)
 # spec.path(resource=UserResource, app=current_app, path="/userinfo/{user_id}")
