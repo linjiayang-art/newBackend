@@ -1,10 +1,10 @@
 from flask.views import MethodView
 from flask import jsonify, request, current_app, json
 from webargs.flaskparser import use_args
-from ...v1 import api_v1
+# from ...v1 import api_v1
 from src.schemas.system_schemas import MenuSchema
 from src.validators import menu_args
-from ....models.system import UserInfo, Menu
+from ....models.system import UserInfo, Menu,SysRoleMenu,SysUserRole
 from sqlalchemy import select
 from ....core.extensions import db
 # from ....core.extensions import db, csrf
@@ -15,7 +15,7 @@ from flask_wtf.csrf import generate_csrf
 # from apispec import APISpec
 menu_schema = MenuSchema()
 menus_schema = MenuSchema(many=True)
-from ....core.auth import generate_token
+from ....core.auth import generate_token,auth
 
 def generate_menu( menu_items: list, parent_id: int):
     result = []
@@ -57,8 +57,6 @@ class MenusAPI(MethodView):
         db.session.commit()
         return '', 204
 
-
-
 class TokenAPI(MethodView):
     def post(self):
         data = request.get_json()
@@ -79,16 +77,46 @@ class TokenAPI(MethodView):
         token, expiration = token_data[0], token_data[1]
         csrf_token = generate_csrf(current_app.config['SECRET_KEY'])
         data = {
-            'access_token':token,
+            'tokenType': 'Bearer',
+            'accessToken':token,
             'status_text': expiration,
             'csrf_token': csrf_token
         }
-        return jsonify(code=200, msg='登录成功', data=data)
-    
+        return jsonify(code="200", msg='登录成功', data=data)
+
+class RoutesAPI(MethodView):
+    decorators = [auth.login_required]
+    def get(self):
+        user_info:UserInfo=auth.current_user() 
+        roleresult=SysUserRole.query.filter_by(user_id=user_info.id).all()
+        roleids=[role.role_id for role in roleresult]
+        
+        meun_select=select(Menu)\
+                                .join(SysRoleMenu,Menu.id== SysRoleMenu.menu_id)\
+                                .filter(SysRoleMenu.role_id.in_(roleids)).filter_by(is_deleted=0).order_by(Menu.id.asc())
+        main_menus = db.session.execute(meun_select)
+        menu_orgin_list = []
+        for p_m in main_menus.scalars():
+            menu_orgin_list.append(p_m)
+        a=  self.generate_menu(menu_orgin_list,0,roles=['admin'])
+        return jsonify(code='200', msg='一切ok', data=a)
+    def generate_menu( self,menu_items: list, parent_id: int,roles:list=[]):
+        result = []
+        for p_m in menu_items:
+            router_dict=dict(p_m.router_dict)
+            router_dict['meta']['roles']=roles
+            if int(p_m.parent_id) == parent_id:
+                submenu = self.generate_menu(menu_items,int(p_m.id),roles)
+                if submenu:
+                    router_dict['children'] = submenu
+                    
+                result.append(router_dict)
+        return result
+
 # Register the resource with the blueprint
-menu_view = MenusAPI.as_view('menu_resource')
-api_v1.add_url_rule('/menus', defaults={'menu_id': None}, view_func=menu_view, methods=['GET'])
-api_v1.add_url_rule('/menus', view_func=menu_view, methods=['POST'])
-api_v1.add_url_rule('/menus/<int:menu_id>', view_func=menu_view, methods=['GET', 'PUT', 'DELETE'])
-token_view = TokenAPI.as_view('token_resource')
-api_v1.add_url_rule('/token', view_func=token_view, methods=['POST'])
+# menu_view = MenusAPI.as_view('menu_resource')
+# api_v1.add_url_rule('/menus', defaults={'menu_id': None}, view_func=menu_view, methods=['GET'])
+# api_v1.add_url_rule('/menus', view_func=menu_view, methods=['POST'])
+# api_v1.add_url_rule('/menus/<int:menu_id>', view_func=menu_view, methods=['GET', 'PUT', 'DELETE'])
+# token_view = TokenAPI.as_view('token_resource')
+# api_v1.add_url_rule('/token', view_func=token_view, methods=['POST'])

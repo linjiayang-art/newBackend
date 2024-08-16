@@ -1,6 +1,6 @@
 from flask_httpauth import HTTPTokenAuth
 from sqlalchemy import select
-from ..models.system import UserInfo
+from ..models.system import UserInfo, SysUserRole,SysRole
 from ..core.extensions import db
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from itsdangerous import  BadSignature, SignatureExpired
@@ -15,7 +15,6 @@ def generate_token(user):
     #验证修改为字典传输
     data={'id':user.id}
     token=s.dumps(data)
-    token='Bearer '+token
     #token=s.dumps({'id':user.Userid}).decode('ascii')
     return(token,expiration)
 
@@ -26,7 +25,7 @@ def generate_token(user):
 def verify_token(token):#验证token 可以返回一个USER
     s=Serializer(current_app.config['SECRET_KEY'])
     try:
-        data=s.loads(token,max_age=3600)
+        data=s.loads(token,max_age=36000)
     except (BadSignature,SignatureExpired):
         return False
     user=db.session.get(UserInfo,data['id'])
@@ -36,4 +35,12 @@ def verify_token(token):#验证token 可以返回一个USER
 
 @auth.get_user_roles
 def get_user_roles(user:UserInfo):
-    return 'admin1'
+    id=user.id
+    #查询用户角色
+
+    #查询用户角色
+    roles=db.session.query(SysRole).join(SysUserRole,SysUserRole.role_id==SysRole.id).filter(SysUserRole.user_id==id).all()
+
+    if roles is None:
+        return []
+    return [role.code for role in roles]

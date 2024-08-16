@@ -48,6 +48,17 @@ def create_app(config_name):
     register_logging(app)
     register_commands(app)
     # with app.app_context():
+    #     spec.components.schema(
+    #         "Gist",
+    #         {
+    #             "properties": {
+    #                 "id": {"type": "integer", "format": "int64"},
+    #                 "name": {"type": "string"},
+    #             }
+    #         },
+    #     )
+
+    #     # spec.path(view=gist_detail)
     #     from src.apis.v1.system.userinfo import UserResource
     #     spec.path(view=UserResource, app=app)
         
