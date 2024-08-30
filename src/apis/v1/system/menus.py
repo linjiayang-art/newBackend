@@ -36,7 +36,7 @@ class MenusAPI(MethodView):
         else:
             menus = db.session.execute(select(Menu).filter_by(is_deleted=0)).scalars().all()
             menus = generate_menu(menus, 0)
-            return jsonify(code=200, data=menus,msg='好的')
+            return jsonify(code="200", data=menus,msg='获取数据成功')
     @use_args(menu_args, location='json')
     def post(self, args):
         menu = menu_schema.load(args)

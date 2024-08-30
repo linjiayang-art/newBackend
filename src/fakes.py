@@ -45,7 +45,7 @@ def fake_menu():
         menu_type='CATALOG',
         menu_path='user',
         component='system/menu/user',
-        menu_visible=True,
+        menu_visible=0,
         menu_sort=3,
         keep_alive=0,
         menu_icon='user',
