@@ -10,7 +10,6 @@ from src.settings import basedir
 
 def register_logging(app:Flask):
     class RequestFormatter(logging.Formatter):
-
         def format(self, record):
             record.url = request.url
             record.remote_addr = request.remote_addr

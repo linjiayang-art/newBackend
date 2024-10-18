@@ -22,3 +22,4 @@ class UserResource(MethodView):
 
 # spec.components.schema("UserInfoSchema", schema=UserInfoSchema)
 # spec.path(resource=UserResource, app=current_app, path="/userinfo/{user_id}")
+
