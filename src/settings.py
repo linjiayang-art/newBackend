@@ -57,9 +57,9 @@ class BaseConfig:
 
 
 class DevelopmentConfig(BaseConfig):
+    
+    SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
     pass
-    # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
-
 
 class TestingConfig(BaseConfig):
     TESTING = True

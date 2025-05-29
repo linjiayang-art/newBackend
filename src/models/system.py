@@ -1,6 +1,6 @@
 from src.core.extensions import db
 #from flask_login import UserMixin
-from sqlalchemy import Column,String,Integer,Text,Boolean, DateTime,BigInteger,func,BigInteger
+from sqlalchemy import Column,String,Integer,Text,Boolean, DateTime,BigInteger,func,Unicode
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.declarative import declarative_base
@@ -33,15 +33,16 @@ class Menu(db.Model,BasicMode):
     __tablename__ = 'sys_menu'
     id = Column(BigInteger, primary_key=True)
     parent_id = Column(BigInteger)
-    menu_path = Column(String(80))
-    component = Column(String(80))
-    redirect_url = Column(String(80))
-    menu_name = Column(String(80))  # title
-    menu_icon = Column(String(80))
-    menu_type = Column(String(80))
+    menu_path = Column(Unicode(160))
+    component = Column(Unicode(160))
+    redirect_url = Column(Unicode(160))
+    menu_name = Column(Unicode(160))  # title
+    route_name= Column(Unicode(160))
+    menu_icon = Column(Unicode(160))
+    menu_type = Column(Unicode(160))
     menu_visible = Column(Boolean, default=True)
     keep_alive = Column(Boolean, default=True)
-    menu_perm = Column(String(80))
+    menu_perm = Column(Unicode(160))
     menu_sort = Column(BigInteger)
 
     @property
