@@ -42,3 +42,5 @@ def register_logging(app:Flask):
     else:
         # app.logger.setLevel(logging.DEBUG)
         app.logger.addHandler(default_handler)
+
+        
