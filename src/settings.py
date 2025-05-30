@@ -44,7 +44,7 @@ class BaseConfig:
     BACKEND_POST_PER_PAGE=10
     BACKEND_MANAGE_POST_PER_PAGE=15
     BACKEND_COMMENT_PER_PAGE=15
-
+    BACKEND_SLOW_QUERY_THRESHOLD=0.1
     #FILE
     UPLOAD_PATH=os.path.join(basedir,'uploads')
     LOG_DIR=os.path.join(basedir, 'logs')
@@ -58,7 +58,7 @@ class BaseConfig:
 
 class DevelopmentConfig(BaseConfig):
     
-    SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
+    #SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
     pass
 
 class TestingConfig(BaseConfig):

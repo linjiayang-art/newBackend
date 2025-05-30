@@ -9,6 +9,7 @@ menu_args = {
     'menu_name': fields.Str(required=True),
     'menu_icon': fields.Str(required=False),
     'menu_type': fields.Str(required=True),
+    'menu_name': fields.Str(required=False),
     'menu_visible': fields.Bool(missing=True),
     'keep_alive': fields.Bool(missing=True),
     'menu_perm': fields.Str(required=False),

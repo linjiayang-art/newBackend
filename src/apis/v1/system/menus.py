@@ -1,9 +1,9 @@
 from flask.views import MethodView
 from flask import jsonify, request, current_app, json
 from webargs.flaskparser import use_args
-# from ...v1 import api_v1
+from ...v1 import api_v1
 from src.schemas.system_schemas import MenuSchema
-from src.validators import menu_args
+from src.validators.menu_args import menu_args
 from ....models.system import UserInfo, Menu,SysRoleMenu,SysUserRole
 from sqlalchemy import select
 from ....core.extensions import db
@@ -16,7 +16,7 @@ from flask_wtf.csrf import generate_csrf
 menu_schema = MenuSchema()
 menus_schema = MenuSchema(many=True)
 from ....core.auth import generate_token,auth
-
+from webargs import fields
 def generate_menu( menu_items: list, parent_id: int):
     result = []
     for p_m in menu_items:
@@ -28,6 +28,8 @@ def generate_menu( menu_items: list, parent_id: int):
             result.append(p_m)
     return result
 
+
+
 class MenusAPI(MethodView):
     def get(self, menu_id=None):
         if menu_id:
@@ -37,12 +39,13 @@ class MenusAPI(MethodView):
             menus = db.session.execute(select(Menu).filter_by(is_deleted=0)).scalars().all()
             menus = generate_menu(menus, 0)
             return jsonify(code="200", data=menus,msg='获取数据成功')
-    @use_args(menu_args, location='json')
+    @use_args(menu_args ,location='json')
     def post(self, args):
         menu = menu_schema.load(args)
-        db.session.add(menu)
+        new_menu= Menu(**menu)
+        db.session.add(new_menu)
         db.session.commit()
-        return jsonify(menu_schema.dump(menu)), 201
+        return jsonify(code='200', msg='添加成功', data=menu_schema.dump(menu))
 
     @use_args(menu_args, location='json')
     def put(self, args, menu_id):
@@ -112,6 +115,20 @@ class RoutesAPI(MethodView):
                     
                 result.append(router_dict)
         return result
+
+
+# register the blueprint
+menu_view = MenusAPI.as_view('menu_resource')
+api_v1.add_url_rule(
+    '/menus', defaults={'menu_id': None}, view_func=menu_view, methods=['GET'])
+api_v1.add_url_rule('/menus', view_func=menu_view, methods=['POST'])
+api_v1.add_url_rule('/menus/<int:menu_id>',
+                    view_func=menu_view, methods=['GET', 'PUT', 'DELETE'])
+token_view = TokenAPI.as_view('token_resource')
+api_v1.add_url_rule('/token', view_func=token_view, methods=['POST'])
+
+router_view = RoutesAPI.as_view('router_resource')
+api_v1.add_url_rule('menus/routes', view_func=router_view, methods=['GET'])
 
 # Register the resource with the blueprint
 # menu_view = MenusAPI.as_view('menu_resource')
