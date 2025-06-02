@@ -1,7 +1,10 @@
 
+import os
+
+import flask
 from ...core.auth import auth
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, current_app, jsonify, send_file, url_for
 from flask_cors import CORS
 from webargs import fields
 from ...core.extensions import db
@@ -21,7 +24,21 @@ from . import system  # 导入当前 v1 目录下的 system 子模块
 def api_v1_index():
     return 'api_v1_index'
 
+    
+                   
 
+@api_v1.route('/user/icon')
+def user_icon():
+    """
+    获取用户头像
+    """
+    avatar_path = os.path.join(current_app.config['MODEL_FILE_DIR'], 'icon.gif')
+    print(avatar_path)
+    with open(avatar_path, 'rb') as f:
+        avatar_base64 = f.read()
+    if not avatar_base64:
+        avatar_base64 = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+    return send_file( avatar_path , mimetype='image/gif')
 @api_v1.route('/users/me')
 @auth.login_required()
 def users_me():
@@ -29,7 +46,7 @@ def users_me():
                      data={ 'userId': 2,
                         'nickname': "系统管理员",
                         'username': "admin",
-                        'avatar':     "https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif",
+                        'avatar':    'http://127.0.1:5000/api/v1/user/icon',
                         'roles': ["ROOT"],
                         'perms': [
                           "sys:menu:delete",

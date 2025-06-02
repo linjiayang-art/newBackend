@@ -15,13 +15,13 @@ def init_flie():
     if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR)
 
-    FILE_DIR=os.path.join(basedir,'uploads')
-    if not os.path.exists(FILE_DIR):
-        os.makedirs(FILE_DIR)
+    UPLOAD_FILE_DIR=os.path.join(basedir,'uploads')
+    if not os.path.exists(UPLOAD_FILE_DIR):
+        os.makedirs(UPLOAD_FILE_DIR)
 
-    FILE_DIR=os.path.join(basedir,'modelfile')
-    if not os.path.exists(FILE_DIR):
-        os.makedirs(FILE_DIR)
+    MODEL_FILE_DIR=os.path.join(basedir,'modelfile')
+    if not os.path.exists( MODEL_FILE_DIR):
+        os.makedirs( MODEL_FILE_DIR)
 
     CACHEFILE_DIR=os.path.join(basedir,'cachefile')
     if not os.path.exists(CACHEFILE_DIR):

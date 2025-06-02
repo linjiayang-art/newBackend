@@ -22,8 +22,8 @@ class BaseConfig:
     BACKEND_SLOW_QUERY_THRESHOLD=0.001
     #database
     
-    SQLALCHEMY_DATABASE_URI="mssql+pymssql://sa:123456@172.16.3.249/backend?charset=utf8"
- 
+    #SQLALCHEMY_DATABASE_URI="mssql+pymssql://sa:123456@172.16.3.249/backend?charset=utf8"
+    #SQLALCHEMY_DATABASE_URI="mssql+pymssql://sa:123456@127.0.0.1/backend?charset=utf8"
     JSON_AS_ASCII=False
     # SQLALCHEMY_BINDS={ 'sicore':'mysql://it:it_123456@172.16.3.226/sicore',
     #                    }
@@ -48,7 +48,7 @@ class BaseConfig:
     #FILE
     UPLOAD_PATH=os.path.join(basedir,'uploads')
     LOG_DIR=os.path.join(basedir, 'logs')
-    FILE_DIR=os.path.join(basedir,'modelfile')
+    MODEL_FILE_DIR=os.path.join(basedir,'modelfile')
     CACHEFILE_DIR=os.path.join(basedir,'cachefile')
    
 
@@ -58,7 +58,7 @@ class BaseConfig:
 
 class DevelopmentConfig(BaseConfig):
     
-    #SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
+    SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
     pass
 
 class TestingConfig(BaseConfig):
@@ -68,8 +68,8 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', prefix + os.path.join(basedir, 'data.db'))
-
+    #SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', prefix + os.path.join(basedir, 'data.db'))
+    pass
 config={
         'development': DevelopmentConfig,
         'testing': TestingConfig,

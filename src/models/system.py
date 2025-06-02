@@ -29,7 +29,7 @@ class UserInfo(db.Model,BasicMode):
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class Menu(db.Model,BasicMode):
+class  Menu(db.Model,BasicMode):
     __tablename__ = 'sys_menu'
     id = Column(BigInteger, primary_key=True)
     parent_id = Column(BigInteger)
@@ -39,7 +39,7 @@ class Menu(db.Model,BasicMode):
     menu_name = Column(Unicode(160))  # title
     route_name= Column(Unicode(160))
     menu_icon = Column(Unicode(160))
-    menu_type = Column(Unicode(160))
+    menu_type = Column(Integer)  # 1:菜单,2:目录,3:按钮,4:外链
     menu_visible = Column(Boolean, default=True)
     keep_alive = Column(Boolean, default=True)
     menu_perm = Column(Unicode(160))
@@ -50,14 +50,17 @@ class Menu(db.Model,BasicMode):
         return {
             'id':self.id,
             'parent_id':self.parent_id,
-            'menu_path':self.menu_path,
+            'parentId':self.parent_id,
+            'routePath':self.menu_path,
             'component':self.component,
-            'redirect_url':self.redirect_url,
-            'menu_name':self.menu_name,
-            'menu_icon':self.menu_icon,
-            'menu_type':self.menu_type,
-            'menu_visible':self.menu_visible,
-            'menu_perm':self.menu_perm
+            'redirect':self.redirect_url,
+            'name':self.menu_name,
+            'icon':self.menu_icon,
+            "routeName": self.route_name,
+            "sort": self.menu_sort,
+            'type':self.menu_type,
+            'visible':self.menu_visible,
+            'perm':self.menu_perm
         }
     @property
     def router_dict(self) -> dict:
@@ -69,12 +72,17 @@ class Menu(db.Model,BasicMode):
             "meta": {
                 "title": self.menu_name,
                 "icon": self.menu_icon,
-                "hidden":self.menu_visible,
+                "hidden":  False if self.menu_visible else True  ,
                 "roles": [],
                 "keepAlive": self.keep_alive
             }
         }
-
+    MENU_TYPE = {
+        1: "MENU",     # 菜单：用于主导航栏，通常有页面组件
+        2: "CATALOG",  # 目录：用于包含子菜单的中间层，通常也有页面
+        3: "BUTTON",   # 按钮：操作级权限（如新增、删除），不显示为菜单
+        4: "EXTLINK"   # 外链：外部链接跳转
+    }
 
 class SysRole(db.Model,BasicMode):
     __tablename__='sys_role'
