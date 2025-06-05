@@ -15,7 +15,7 @@ CORS(api_v1)
 # docs.register(UserResource,blueprint='api_v1', endpoint='user_create')
 
 # 注册 v1 版本相关蓝图或模块
-from . import system  # 导入当前 v1 目录下的 system 子模块
+from . import system,experiment  # 导入当前 v1 目录下的 system 子模块
 
 
 

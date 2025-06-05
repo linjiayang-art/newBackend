@@ -5,6 +5,7 @@ from flask import current_app
 from sqlalchemy import select
 
 from src.core.extensions import db
+from src.fakes import fake_dict, fake_experiment_reports
 
 def register_commands(app):
     @app.cli.command()
@@ -51,3 +52,8 @@ def register_commands(app):
         click.echo(f'fake_user_role')
 
         click.echo(f'fake_customer_info')
+        fake_experiment_reports()
+        click.echo(f'fake_experiment_reports')
+
+        fake_dict()
+        click.echo(f'fake_dict')

@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields
-
+from .base_schemas import BaseSchema
 class UserInfoSchema(Schema):
     id = fields.Int(dump_only=True)
     userno = fields.Str(required=True)
@@ -20,4 +20,31 @@ class MenuSchema(Schema):
     keep_alive = fields.Bool(data_key='keepAlive')
     menu_perm = fields.Str(data_key='perm')
     menu_sort = fields.Int(data_key='sort')
+    route_name = fields.Str(data_key='routeName')
+
+class DictTypeQuerySchema(BaseSchema):
+    type_code = fields.Str(data_key='typeCode')
+    keywords = fields.Str(data_key='keywords', allow_none=True)  # 允许为空
+    name= fields.Str(data_key='name', allow_none=True)  # 允许为空
+'''
+    name = Column(String(255))
+    code = Column(String(255))
+    status = Column(Boolean, default=True)
+    remark = Column(String(255))
+'''
+class DictTpyeReportSchema(Schema):
+    id = fields.Int(data_key='id')
+    code = fields.Str(data_key='dictCode', required=True)
+    name = fields.Str(data_key='name', required=True)
+    status = fields.Integer(data_key='status', default=True)
+    remark = fields.Str(data_key='remark', allow_none=True)  # 允许为空
+    
+class DictItemSchema(Schema):
+    id = fields.Int()
+    dict_code = fields.Str(data_key='dictCode', required=True)
+    label= fields.Str(data_key='label', required=True)
+    value= fields.Str(data_key='value', required=True)
+    sort= fields.Int(data_key='sort', required=True)
+    status = fields.Int(data_key='status', default=1)  # 默认值为1
+    tag_type= fields.Str(data_key='tagType', allow_none=True)  # 允许为空
 

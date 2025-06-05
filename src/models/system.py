@@ -68,7 +68,7 @@ class  Menu(db.Model,BasicMode):
             "path": self.menu_path,
             "component": self.component,
             "redirect": self.redirect_url,
-            "name": self.menu_path,
+            "name": self.route_name,
             "meta": {
                 "title": self.menu_name,
                 "icon": self.menu_icon,
@@ -128,18 +128,32 @@ class SysRolePerm(db.Model,BasicMode):
 class DictType(db.Model, BasicMode):
     __tablename__ = 'sys_dict_type'
     id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    code = Column(String(255))
+    name = Column(Unicode(255))
+    code = Column(Unicode(255))
     status = Column(Boolean, default=True)
-    remark = Column(String(255))
+    remark = Column(Unicode(255))
 
 
 
 class DictItem(db.Model, BasicMode):
     __tablename__ = 'sys_dict_item'
     id = Column(Integer, primary_key=True)
-    type_code = Column(String(50))
+    dict_code = Column(String(50))
     type_id = Column(String(50))
-    name = Column(String(50))
-    value = Column(String(50))
+    label = Column(Unicode(50))
+    value = Column(Unicode(50))
     status =Column(Boolean, default=True)
+    sort = Column(Integer, default=0)   
+    tag_type= Column(String(50), default='')  # 标签类型，如success, danger等
+
+class Department(db.Model, BasicMode):
+    __tablename__ = 'sys_department'
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, default=0)
+    dept_name = Column(Unicode(100))
+    dept_sort = Column(Integer, default=0)
+    leader = Column(String(50))
+    phone = Column(String(50))
+    email = Column(String(50))
+    status = Column(Boolean, default=True)
+    remark = Column(String(255), default='')

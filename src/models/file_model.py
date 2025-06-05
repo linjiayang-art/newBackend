@@ -16,3 +16,4 @@ class UserFilePermission(db.Model):
     user_id = Column(Integer )
     file_id = Column(Integer)
     permission = Column(String(10))  # 'read', 'write', 'delete'
+    
