@@ -49,7 +49,18 @@ class ExperimentReportAPI(MethodView):
             new_res=experiment_report_schema.dump(report)
             results.append(new_res)
         return jsonify(code='200', data=results, msg='获取信息成功！')
-
+    def put(self, report_id):
+        report = ExperimentReport.query.get_or_404(report_id)
+        print(f'更新实验报告ID: {report_id}')
+        try:
+            data = experiment_report_schema.load(request.json, partial=True)
+        except ValidationError as err:
+            return jsonify(code='400', msg='参数错误', data=err.messages), 400
+        for key, value in data.items():
+            setattr(report, key, value)
+        db.session.commit()
+        res = experiment_report_schema.dump(report)
+        return jsonify(code='200', data=res, msg='更新成功！')
 
 api_v1.add_url_rule('/experiment/report', view_func=ExperimentReportAPI.as_view('experiment_report'), methods=['GET'])
-api_v1.add_url_rule('/experiment/report/<int:report_id>', view_func=ExperimentReportAPI.as_view('experiment_report_detail'), methods=['GET'])
+api_v1.add_url_rule('/experiment/report/<int:report_id>', view_func=ExperimentReportAPI.as_view('experiment_report_detail'), methods=['GET', 'PUT'])

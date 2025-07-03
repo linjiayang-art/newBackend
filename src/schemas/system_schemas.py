@@ -48,3 +48,6 @@ class DictItemSchema(Schema):
     status = fields.Int(data_key='status', default=1)  # 默认值为1
     tag_type= fields.Str(data_key='tagType', allow_none=True)  # 允许为空
 
+class DictItemOptionSchema(Schema):
+    label = fields.Str(required=True)
+    value = fields.Str(required=True)

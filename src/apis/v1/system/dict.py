@@ -17,6 +17,7 @@ dict_type_detail_schema = DictTpyeReportSchema()  # 单项序列化
 dict_type_query_schema = DictTypeQuerySchema()    # 查询参数校验和反序列化
 dict_items_schema = DictItemSchema(many=True)  # 字典项序列化
 dict_item_schema = DictItemSchema()  # 字典项序列化
+
 class DictAPI(MethodView):
     """
     字典类型接口类：
@@ -132,10 +133,22 @@ class DictItemAPI(MethodView):
         return jsonify(code='200', data=res, msg='获取字典项成功！')
 
 class DictItemsAPI(MethodView):
-    def get(self, dict_code,id):
+    def get(self, dict_code,id=None):
         """
         GET 请求：获取指定字典类型的所有字典项
         """
+        if not id:
+            print(f'获取字典项信息，字典类型代码：{dict_code}')
+            dict_items = DictItem.query.filter_by(dict_code=dict_code,is_deleted=0).all()
+            if not dict_items:
+                return jsonify(code='404', data=[], msg='没有字典项信息！')
+            # 序列化字典项
+            print(f'获取字典项信息，字典类型代码：{dict_code}，字典项数量：{len(dict_items)}')
+            res= dict_items_schema.dump(dict_items)
+            if not res:
+                return jsonify(code='404', data=[], msg='没有字典项信息！')
+            return jsonify(code='200', data=res, msg='获取字典项成功！')
+
         dict_items = DictItem.query.filter_by(id=id,is_deleted=0).scalar()
         if not dict_items:
             return jsonify(code='404', data=[], msg='没有字典项信息！')
@@ -199,4 +212,4 @@ api_v1.add_url_rule('/dicts/<int:dict_id>/form', view_func=DictAPI.as_view('dict
 api_v1.add_url_rule('/dicts/<string:dict_code>/items/page', view_func=DictItemAPI.as_view('dict_items'), methods=['GET'])
 api_v1.add_url_rule('/dicts/<string:dict_code>/items/<int:id>/form', view_func=DictItemsAPI.as_view('dict_item_get'), methods=['GET'])
 api_v1.add_url_rule('/dicts/<string:dict_code>/items/<int:id>', view_func=DictItemsAPI.as_view('dict_item_edit'), methods=['PUT','DELETE'])
-api_v1.add_url_rule('/dicts/<string:dict_code>/items', view_func=DictItemsAPI.as_view('dict_item_add'), methods=['POST',])
+api_v1.add_url_rule('/dicts/<string:dict_code>/items', view_func=DictItemsAPI.as_view('dict_item_add'), methods=['POST','GET'])

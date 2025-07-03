@@ -42,6 +42,7 @@ def upload():
 @api_v1.route('/download/<local_file>',methods=['GET'])
 def download(local_file):
     #local_file='5f946ca7ce7e47638f8d972a0e52017d.md'
+    print(f'下载文件: {local_file}')
     fileinfo=FileInfo(orginname=local_file,localname=local_file,file_path='2023/12')
     db.session.add(fileinfo)
     db.session.commit()

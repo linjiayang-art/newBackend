@@ -5,7 +5,7 @@ from flask import current_app
 from sqlalchemy import select
 
 from src.core.extensions import db
-from src.fakes import fake_dict, fake_experiment_reports
+from src.fakes import fake_dict, fake_experiment_reports, fake_test_items
 
 def register_commands(app):
     @app.cli.command()
@@ -30,7 +30,7 @@ def register_commands(app):
     def fake(category, post, comment, reply):
         """Generate fake data."""
         from src.fakes import fake_admin, fake_menu, fake_role_menu,\
-            fake_role,fake_user_role
+            fake_role,fake_user_role, fake_experiment_reports, fake_device
 
         db.drop_all()
         db.create_all()
@@ -57,3 +57,7 @@ def register_commands(app):
 
         fake_dict()
         click.echo(f'fake_dict')
+        fake_device()
+        click.echo(f'fake_device')
+        fake_test_items()
+        click.echo(f'fake_test_items')

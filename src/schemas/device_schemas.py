@@ -1,0 +1,35 @@
+from marshmallow import Schema, fields
+from src.schemas.base_schemas import BaseSchema
+
+class DeviceSchema(Schema):
+    id = fields.Int(dump_only=True, data_key='id', metadata={"description": "序号"})
+    manage_code = fields.Str(data_key='manageCode', metadata={"description": "管理编号"})
+    device_type = fields.Str(data_key='deviceType', metadata={"description": "设备类型"})
+    device_name = fields.Str(data_key='deviceName', metadata={"description": "设备名称"})
+    device_model = fields.Str(data_key='deviceModel', metadata={"description": "设备型号"})
+    serial_number = fields.Str(data_key='serialNumber', metadata={"description": "出厂编号"})
+    manufacturer = fields.Str(data_key='manufacturer', metadata={"description": "制造厂商"})
+    management_department = fields.Str(data_key='managementDepartment', metadata={"description": "管理部门"})
+    location = fields.Str(data_key='location', metadata={"description": "放置位置"})
+    start_date = fields.Date(data_key='startDate', metadata={"description": "起用时间"})
+    check_cycle = fields.Str(data_key='checkCycle', metadata={"description": "校准/检查周期"})
+    last_check_date = fields.Date(data_key='lastCheckDate', metadata={"description": "最近检定/完好评定日期"})
+    status = fields.Str(data_key='status', metadata={"description": "使用状态"})
+    check_type = fields.Str(data_key='checkType', metadata={"description": "计量校准/完好评定"})
+    next_check_date = fields.Date(data_key='nextCheckDate', metadata={"description": "有效期/下次检查日期"})
+    metering_property = fields.Str(data_key='meteringProperty', metadata={"description": "计量特性"})
+    unit = fields.Str(data_key='unit', metadata={"description": "计量单位"})
+    remarks = fields.Str(data_key='remarks', metadata={"description": "备注"})
+
+class DeviceQuerySchema(BaseSchema):
+    manage_code = fields.Str(data_key='manageCode',required=False)
+    device_type = fields.Str(data_key='deviceType',required=False)
+    device_name = fields.Str(data_key='deviceName',required=False)
+    device_model = fields.Str(data_key='deviceModel',required=False)
+    manufacturer = fields.Str(data_key='manufacturer',required=False)
+    management_department = fields.Str(data_key='managementDepartment',required=False)
+    status = fields.Str(data_key='status',required=False)
+    start_date_from = fields.Date(data_key='startDateFrom',required=False)
+    start_date_to = fields.Date(data_key='startDateTo',required=False)
+    last_check_date_from = fields.Date(data_key='lastCheckDateFrom',required=False)
+    last_check_date_to = fields.Date(data_key='lastCheckDateTo',required=False)
