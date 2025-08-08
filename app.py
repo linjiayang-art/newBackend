@@ -21,7 +21,5 @@ def admins_only():
     return "Hello {}, you are an admin or a moderator!".format(user_info.password_hash)
 
 
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)

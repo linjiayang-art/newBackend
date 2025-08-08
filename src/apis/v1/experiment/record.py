@@ -51,7 +51,6 @@ class ExperimentReportAPI(MethodView):
         return jsonify(code='200', data=results, msg='获取信息成功！')
     def put(self, report_id):
         report = ExperimentReport.query.get_or_404(report_id)
-        print(f'更新实验报告ID: {report_id}')
         try:
             data = experiment_report_schema.load(request.json, partial=True)
         except ValidationError as err:

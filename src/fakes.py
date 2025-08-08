@@ -4,7 +4,7 @@ from sqlalchemy import select, func
 from src.core.extensions import db
 from src.models.experiment import ExperimentReport
 from src.models.system import UserInfo, Menu, SysUserRole, SysRoleMenu, SysRole
-from src.models.test_item import TestItemBaseInfo
+from src.models.test_item import TestItemBaseInfo, TestItemInfo,TestSubjectInfo
 
 
 def fake_admin():
@@ -99,7 +99,7 @@ def fake_menu():
     menus = [
         # 顶级菜单
         Menu(id=1, parent_id=0, menu_name='信息汇总', menu_type=2, menu_path='/info', component='Layout', menu_icon='icon-info', menu_sort=1),
-        Menu(id=2, parent_id=0, menu_name='检测、认证申请', menu_type=2, menu_path='/application', component='Layout', menu_icon='icon-apply', menu_sort=2),
+        Menu(id=2, parent_id=0, menu_name='检测、认证申请', menu_type=2, menu_path='/testWorkFlow', component='Layout', menu_icon='icon-apply', menu_sort=2),
         Menu(id=3, parent_id=0, menu_name='进度更新', menu_type=2, menu_path='/progress', component='Layout', menu_icon='icon-progress', menu_sort=3),
         Menu(id=4, parent_id=0, menu_name='流程维护', menu_type=2, menu_path='/workflow', component='Layout', menu_icon='icon-flow', menu_sort=4),
         Menu(id=5, parent_id=0, menu_name='记录查询', menu_type=2, menu_path='/record', component='Layout', menu_icon='icon-record', menu_sort=5),
@@ -113,7 +113,9 @@ def fake_menu():
         Menu(id=10, parent_id=1, menu_name='检测信息汇总', menu_type=1, menu_path='info-summary', component='info/summary', menu_sort=1),
         Menu(id=11, parent_id=1, menu_name='检测进度查询', menu_type=1, menu_path='progress-query', component='info/progress-query', menu_sort=2),
         Menu(id=12, parent_id=1, menu_name='设备运行汇总', menu_type=1, menu_path='device-summary', component='info/device-summary', menu_sort=3),
-
+        #子菜单(检测、认证申请)
+        Menu(id=20, parent_id=2, menu_name='检测、认证申请', menu_type=1, menu_path='/application', component='testWorkFlow/application/index', menu_sort=1,route_name='testWorkFlowApplication'),
+            Menu(id=20, parent_id=2, menu_name='检测、认证申请', menu_type=1, menu_path='/application', component='testWorkFlow/application/index', menu_sort=1,route_name='testWorkFlowApplication'),
         # 子菜单（进度更新）
         Menu(id=13, parent_id=3, menu_name='检测、认证进度', menu_type=1, menu_path='cert-progress', component='progress/cert-progress', menu_sort=1),
         Menu(id=14, parent_id=3, menu_name='设备运行', menu_type=1, menu_path='device-run', component='progress/device-run', menu_sort=2),
@@ -291,6 +293,16 @@ def fake_device():
             print(f"Error adding device: {e}, data: {device_data}")
   
  
+def fake_test_models():
+    model_list=['端子-导体间拉脱力','端子-导体间剥离力','端子间插拔力']
+    for model_name in model_list:
+        model = TestSubjectInfo(
+            name=model_name,
+            name_cn=model_name,
+            description=f"{model_name}的测试模型"
+        )
+        db.session.add(model)
+    db.session.commit()
 
 def fake_test_items():
     # Data extracted from the provided document, including Chinese test names
@@ -374,3 +386,18 @@ def fake_test_items():
         # Commit the changes to the database
     db.session.commit()
     print(f"Successfully populated {len(test_items)} test items.")
+
+def fake_subject_item():
+    id_list=[1,2,3]
+    for i in id_list:
+        test_item = TestItemInfo(
+            test_subject_id=i,
+            sort_order=1,
+            test_name=f"测试项目{i}",
+            test_name_cn=f"测试项目{i}中文",
+            test_spec="测试标准号及名称",
+            test_criteria="目标要求（评定依据）",
+            sample_quantity="样品数量"
+        )
+        db.session.add(test_item)
+    db.session.commit()

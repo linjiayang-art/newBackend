@@ -5,7 +5,7 @@ from flask import current_app
 from sqlalchemy import select
 
 from src.core.extensions import db
-from src.fakes import fake_dict, fake_experiment_reports, fake_test_items
+from src.fakes import fake_dict, fake_experiment_reports, fake_subject_item, fake_test_items,fake_test_models
 
 def register_commands(app):
     @app.cli.command()
@@ -59,5 +59,9 @@ def register_commands(app):
         click.echo(f'fake_dict')
         fake_device()
         click.echo(f'fake_device')
+        fake_test_models()
+        click.echo(f'fake_test_models')
         fake_test_items()
         click.echo(f'fake_test_items')
+        fake_subject_item()
+        click.echo(f'fake_subject_item')
